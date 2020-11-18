@@ -1,0 +1,64 @@
+# Image with ruby 2.1.5 running on debian:jessie-slim
+FROM debian:jessie-slim
+
+# Install rbenv and ruby build dependencies
+RUN apt-get update \
+&& apt-get -y install curl \
+autoconf \
+bison \
+build-essential \
+libssl-dev \
+libyaml-dev \
+libreadline6-dev \
+zlib1g-dev \
+libncurses5-dev \
+libffi-dev \
+libgdbm3 \
+libgdbm-dev \
+git-core
+
+# Set up non-root user
+# useradd is non-interactive alternative to adduser
+RUN apt-get update && apt-get install sudo
+RUN groupadd app \
+&& useradd -m -g app -G sudo app \
+&& echo "app:app" | chpasswd
+
+# Switch to using the non-root user to install ruby
+USER app
+
+# Set up the environment so the user can find rbenv
+ENV HOME /home/app
+ENV PATH $HOME/.rbenv/shims:$HOME/.rbenv/bin:$HOME/.rbenv/plugins/ruby-build/bin:$PATH
+ENV CONFIGURE_OPTS --disable-install-doc
+
+# Install rbenv and ruby-build
+RUN git clone https://github.com/rbenv/rbenv.git ~/.rbenv \
+&& git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
+
+# Finally install ruby
+RUN rbenv install 2.1.5
+
+# Set the global version and install bundler
+RUN echo 'gem: --no-rdoc --no-ri' >> ~/.gemrc \
+&& rbenv global 2.1.5 \
+&& gem install bundler
+
+# Clean up
+USER root
+RUN apt-get -y --purge remove \
+bison \
+build-essential \
+libssl-dev \
+libyaml-dev \
+libreadline6-dev \
+zlib1g-dev \
+libncurses5-dev \
+libffi-dev \
+libgdbm3 \
+libgdbm-dev \
+git-core && apt-get -y autoremove
+
+# Default commands for docker run
+USER app
+CMD ["bash"]
