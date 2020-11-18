@@ -11,7 +11,7 @@
 
 # To build the image: docker build -t deb-tty:0.4
 # To run the container: docker run -it --rm deb-tty:0.4
-FROM debian:jessie
+FROM debian:jessie-slim
 
 # Install rbenv and ruby build dependencies
 RUN apt-get update \
@@ -52,11 +52,11 @@ RUN git clone https://github.com/rbenv/rbenv.git ~/.rbenv \
 && git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
 
 # Finally install ruby
-RUN rbenv install 2.3.8
+RUN rbenv install 2.1.5
 
 # Set the global version and install bundler
 RUN echo 'gem: --no-rdoc --no-ri' >> ~/.gemrc \
-&& rbenv global 2.3.8 \
+&& rbenv global 2.1.5 \
 && gem install bundler
 
 # Clean up
