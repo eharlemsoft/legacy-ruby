@@ -29,7 +29,9 @@ ENV PATH="$RBENV_ROOT/shims:$RBENV_ROOT/bin:$PATH"
 # Switch global ruby to 2.1.5
 # Finally install ruby and the bundler gem
 RUN rbenv install 2.3.8
-RUN rbenv global 2.3.8 && gem install bundler
+RUN rbenv global 2.3.8 &&\
+    gem update --system &&\
+    gem install bundler
 
 # Set up a non-root user
 RUN groupadd -g 999 app &&\
