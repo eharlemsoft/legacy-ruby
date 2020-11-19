@@ -18,10 +18,13 @@ libgdbm-dev \
 git-core
 
 # Install rbenv and ruby-build
-RUN git clone https://github.com/rbenv/rbenv.git ~/.rbenv \
-&& git clone https://github.com/rbenv/ruby-build.git
-ENV PATH="/root/.rbenv/bin:/root/.rbenv/shims:$PATH"
-RUN PREFIX=/usr/local ./ruby-build/install.sh
+RUN git clone https://github.com/rbenv/rbenv.git /usr/local/rbenv &&\
+    git clone https://github.com/rbenv/ruby-build.git /usr/local/rbenv/plugins/ruby-build &&\
+    chgrp -R www-data /usr/local/rbenv &&\
+    chmod -R g+rwxXs /usr/local/rbenv
+
+ENV RBENV_ROOT="/usr/local/rbenv"
+ENV PATH="$RBENV_ROOT/shims:$RBENV_ROOT/bin:$PATH"
 
 # Finally install ruby
 RUN rbenv install 2.1.5
