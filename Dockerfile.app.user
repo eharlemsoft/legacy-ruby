@@ -59,6 +59,11 @@ libgdbm3 \
 libgdbm-dev \
 git-core && apt-get -y autoremove
 
+# Set the global version and install bundler
+# RUN echo 'gem: --no-rdoc --no-ri' >> ~/.gemrc \
+# && rbenv global 2.1.5 \
+# && gem install bundler
 # Default commands for docker run
+
 USER app
 CMD ["bash"]

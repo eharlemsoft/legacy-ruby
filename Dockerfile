@@ -26,13 +26,17 @@ RUN git clone https://github.com/rbenv/rbenv.git /usr/local/rbenv &&\
 ENV RBENV_ROOT="/usr/local/rbenv"
 ENV PATH="$RBENV_ROOT/shims:$RBENV_ROOT/bin:$PATH"
 
-# Finally install ruby
-RUN rbenv install 2.1.5
+# Switch global ruby to 2.1.5
+# Finally install ruby and the bundler gem
+RUN rbenv install 2.3.8
+RUN rbenv global 2.3.8 && gem install bundler
 
-# Set the global version and install bundler
-# RUN echo 'gem: --no-rdoc --no-ri' >> ~/.gemrc \
-# && rbenv global 2.1.5 \
-# && gem install bundler
+# Set up a non-root user
+RUN groupadd -g 999 app &&\
+    useradd -m -r -u 999 -g app -G www-data app
+
+# Switch to non-root user
+USER app
 
 # Default commands for docker run
 CMD ["bash"]
