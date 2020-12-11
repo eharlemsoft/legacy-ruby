@@ -1,4 +1,4 @@
-# Image with ruby 2.1.5 running on debian:jessie-slim
+# Image with ruby 2.3.8 running on debian:jessie-slim
 FROM debian:jessie-slim
 
 # Install rbenv and ruby build dependencies
@@ -26,7 +26,7 @@ RUN git clone https://github.com/rbenv/rbenv.git /usr/local/rbenv &&\
 ENV RBENV_ROOT="/usr/local/rbenv"
 ENV PATH="$RBENV_ROOT/shims:$RBENV_ROOT/bin:$PATH"
 
-# Switch global ruby to 2.1.5
+# Switch global ruby to 2.3.8
 # Finally install ruby and the bundler gem
 RUN rbenv install 2.3.8
 RUN rbenv global 2.3.8 &&\
